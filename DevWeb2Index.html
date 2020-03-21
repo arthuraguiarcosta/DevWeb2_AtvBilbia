@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevWeb2_Bíblia</title>
+</head>
+<body>
+    <div >
+        <canvas id="chart1"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script>
+        let URL = 'http://127.0.0.1:3000'
+        let num;
+        let name;
+        async function getNum() 
+        {
+            await fetch(`${URL}/getnumarray`)
+                .then(res => res.json()
+                .then(result => num = result))
+        }
+        async function getName()
+        {
+            await fetch(`${URL}/getnamearray`)
+                .then(res => res.json()
+                .then(result => name = result))
+        }
+        chart();
+        async function chart() {
+        await getNum();
+        await getName();
+        let colors = [];
+        for(let i = 0; i < 10; i++)
+        {
+            let color1 = Math.ceil(Math.random() * 255);
+            let color2 = Math.ceil(Math.random() * 255);
+            let color3 = Math.ceil(Math.random() * 255);
+            colors[i] = "rgba("+color1+", "+color2+", "+color3+", 0.5)";
+        }
+        var ctx = document.getElementById('chart1').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: name,
+                datasets: [{
+                    label: '',
+                    data: num, 
+                    backgroundColor: 
+                    [
+                        colors[0],
+                        colors[1],
+                        colors[2],
+                        colors[3],
+                        colors[4],
+                        colors[5],
+                        colors[6],
+                        colors[7],
+                        colors[8],
+                        colors[9]
+                    ],                                       
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: { display: false },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+        }
+    </script>
+</body>
+</html>
